@@ -1,0 +1,98 @@
+((exp)=>{
+    /*
+        [queJS Function] product.js
+        : 상품 관련 함수(기존 레거시 코드)
+    */
+    /*
+        =-=-=-=-=-= private =-=-=-=-=-=
+    */
+    let _doubleChk = false;
+    const setEqualEvent = function(){
+        // 좋아요 클릭시
+        $(document).on("click", ".button_toggle.equal, .button_equal", function(e) {
+            const domType = $(this).data('domType');
+
+            // 로그인 체크
+            comm.chkLogin().then((loginTf)=>{
+                try {
+                    if (!loginTf) {
+                        // 이퀄버튼 해제
+                        // $(this).toggleClass("is_active");
+        
+                        // 로그인 알럿 후 이동
+                        showAlert2("로그인 후 이용가능합니다.", "알림", () => comm.goLogin()); 
+                        return false;
+                    }
+        
+                    if (!_doubleChk) {
+                        // 이퀄 (좋아요)
+                        _doubleChk = true;
+                        if(domType == 'span'){
+                            comm.setEqual($(this), function() { _doubleChk = false;}, "S");
+                        }else{
+                            comm.setEqual($(this), function() { _doubleChk = false;}, "B");
+                            var EqualChk = $(this).attr('godno');
+                            if($(this).hasClass("is_active")){
+                                $('button[godno='+EqualChk+']').removeClass('is_active');
+                            }else{
+                                $('button[godno='+EqualChk+']').addClass('is_active');
+                            }
+                        }
+                    }
+                } catch (error) {
+                    console.warn('⚡[queJS] Failed to setEqualEvent', error);
+                }
+            });
+        });
+    }
+    
+    const goProductDetail = function(obj){
+        // 구글 GA : Product Click
+        if ($("input[name='mallGubun']").val() == "CTGRY") {
+            
+            var product = new Object();
+            var actionList = new Object();
+            var products = new Array();
+            var dimension = new Object();
+            var metric = new Object();
+            var step ='click';
+            
+            try {
+                product.id = $(obj).attr("godNo");
+                product.name = $(obj).attr("godNm");
+                product.brand = $(obj).attr("brndNm");
+                product.category = $("input[name='fullDspNm']").val();
+                product.position = $(obj).attr('tagIndex');
+                
+                actionList.currencyCode ='KRW';
+                actionList.list = $("input[name='fullDspNm']").val().replaceAll('/','_');
+                
+                dimension.action = 'Click';
+                dimension.category ='Ecommerce';
+                
+                products.push(product);
+                GPGA.EcommerceSet(step, products, actionList, dimension, metric);
+    
+                // 이벤트 태깅
+                GPGA.EVENT.setLabel(product.name);
+            }
+            catch (e) {
+            }
+        }
+    
+        setTimeout(function() {
+            let url = '/product/'+$(obj).attr("godNo")+'/detail';
+            if ($(obj).attr("reviewViewYn") == "Y"){
+                url += '?reviewViewYn=Y';
+            }
+            fn_productDetailOpen(url);
+        }, 100);
+    }
+
+    /*
+        =-=-=-=-=-= exports =-=-=-=-=-=
+    */
+    exp.PRODUCT = exp.PRODUCT || {};
+    exp.PRODUCT.setEqualEvent = setEqualEvent;
+    exp.PRODUCT.goProductDetail = goProductDetail;
+})(window.$QFn);
