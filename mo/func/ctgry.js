@@ -144,7 +144,7 @@
         });
     }
 
-    // [exports] 리뷰관>리뷰 목록 조회
+    // [exports] 리뷰관 > 리뷰 목록 조회
     function getReviewList(type){
     	const queryString = updateURL();
     	const isBack = document.querySelector('#ctgryParams [name="back"]')?.value;

@@ -33,36 +33,36 @@
     
     const goProductDetail = function(obj){
         // 구글 GA : Product Click
-        if ($("input[name='mallGubun']").val() == "CTGRY") {
-        
-            var product = new Object();
-            var actionList = new Object();
-            var products = new Array();
-            var dimension = new Object();
-            var metric = new Object();
-            var step ='click';
-            
-            try {
-                product.id = $(obj).attr("godNo");
-                product.name = $(obj).attr("godNm");
-                product.brand = $(obj).attr("brndNm");
-                product.category = $("input[name='fullDspNm']")?.val();
-                product.position = $(obj).attr('tagIndex');
-                
-                actionList.currencyCode ='KRW';
-                actionList.list = $("input[name='fullDspNm']")?.val().replaceAll('/','_');
-                
-                dimension.action = 'Click';
-                dimension.category ='Ecommerce';
-                
-                products.push(product);
-                GPGA.EcommerceSet(step, products, actionList, dimension, metric);
-    
-                // 이벤트 태깅
-                GPGA.EVENT.setLabel(product.name);
-            }
-            catch (e) {
-            }
+        var product = new Object();
+        var actionList = new Object();
+        var products = new Array();
+        var dimension = new Object();
+        var metric = new Object();
+        var step ='click';
+
+        try {
+            product.id = $(obj).attr("godNo");
+            product.name = $(obj).attr("godNm");
+            product.brand = $(obj).attr("brndNm");
+            product.category = $("input[name='fullDspNm']")?.val();
+            product.position = $(obj).attr('tagIndex');
+
+            actionList.currencyCode ='KRW';
+            actionList.list = $("input[name='fullDspNm']")?.val()?.replaceAll('/','_');
+
+            dimension.action = 'Click';
+            dimension.category ='Ecommerce';
+
+            products.push(product);
+            GPGA.EcommerceSet(step, products, actionList, dimension, metric);
+            GA4?.ECOMMERCE?.selectItem(obj); // 구글 GA4 전자상거래 - 상품선택
+
+            // 이벤트 태깅
+            GPGA.EVENT.setLabel(product.name);
+        }
+        catch (e) {
+            console.log('goProductDetail 함수 ERROR');
+            console.log(e.message);
         }
     
         setTimeout(function() {

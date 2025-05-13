@@ -126,7 +126,7 @@
 
         return `
             <button type="button" class="tab_btn depth4 ${isActive ? 'is_active' : ''}" data-dsp-ctgry-no="${item.no}" data-depth-cd="4" onclick="$QUI.Lnb.clickLnbDepth4(event);" data-sort="${item.sort}">
-                ${item.name}
+                ${($QUI.Lnb._lnbLang == 'KOR') ? item.name : item.engName}
             </button>
         `;
     };
@@ -162,6 +162,9 @@
         }else{
             $QFn.CTGRY.updateForm({selectCtgryNo:selectedNo,sort:sortCd,page:1,back:'N'}, 'getList', 'reset');
         }
+
+        // [GA4] 트래킹 : 페이지뷰 + 맞춤 이벤트
+        $QUI.Lnb.ga4_tracking(selectedNo);
     };
 
     /*

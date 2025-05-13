@@ -4,7 +4,7 @@
     */
     exp.COMP.TabWrapper = (nowTabCd)=>{
         return `
-            <div class="tab_style2 col_gray" >
+            <div class="tab_style2 col_gray ga_event_search_10" >
                 ${$QUI.Promo._tabList.map((tab)=>{
                     return $QUI.Promo.COMP.Tab(tab, nowTabCd);
                 }).join('')}

@@ -134,6 +134,65 @@
             });
         });
     }
+
+    // [exports] 리뷰관 > 리뷰 목록 조회
+    const getReviewList = function(type) {
+    	const queryString = updateURL();
+    	const isBack = document.querySelector('#ctgryParams [name="back"]')?.value;
+		var url = ""
+		if (type == 'more'){
+			url = "/category/v2/reviewList?more=Y"
+		}else{
+			url = "/category/v2/reviewList"
+		}
+    	return new Promise((resolve, reject) => {
+        	$.ajax({
+            	type : "POST",
+            	url : url,
+            	data: queryString,
+            	beforeSend: function (request){
+                	if(frontState('get') == 'FIRST_ENTRY') {
+                    	// 최초 접속 시, 로딩바 제거
+                	}else{
+                    	showLoadingPopup2(false, 999);
+                	}
+            	},
+            	success : function(result) {
+                	if(type != 'more'){
+                    	// 더보기가 아닐 경우(통목록 조회)
+                    	$('#reviews-section').html(result);
+                	}else{
+                    	// 더보기 일 경우(li만 추가)
+                    	$('#reviews-section .product_info li[name="review"]').last().after(result);
+                	}
+                	resolve(result);
+            	},
+            	error : function(e) {
+                	showAlert2(e.responseText);
+                	reject(e);
+            	},
+            	complete: function () {
+                	if(frontState('get') == 'FIRST_ENTRY') {
+                    	// 최초 접속 시, 로딩바 제거
+                	}else{
+                    	hideLoadingPopup2();
+                	}
+                	if(frontState('get') == 'BACK' && isBack == 'Y'){
+                    	// 뒤로가기로 접근 시, 스크롤 값 삭제
+                    	scrollBack('move');
+                	}else{
+                    	scrollBack('del');
+                	}
+
+                	// 상품 목록 조회 후 뒤로가기(Y) 처리
+                	updateForm({back:'Y'});
+                	updateURL();
+
+                	CREMA.Widget.run();
+            	}
+        	});
+    	});
+	}
     
     // [exports]
     const getGodsListMore = function(){
@@ -249,6 +308,7 @@
     exp.CTGRY.updateURL = updateURL;
     exp.CTGRY.getGodsList = getGodsList;
     exp.CTGRY.getGodsListMore = getGodsListMore;
+    exp.CTGRY.getReviewList = getReviewList;
     exp.CTGRY.getFilterCount = getFilterCount;
     exp.CTGRY.scrollCtgry = scrollCtgry;
     exp.CTGRY.scrollBack = scrollBack;

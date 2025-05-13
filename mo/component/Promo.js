@@ -25,7 +25,7 @@
 			<section class="no_bt">
 				<div class="prd_subtit">연관 콘텐츠</div>
 				<div class="swiper swiper_type5 inner_left">
-					<ul class="swiper-wrapper product_list_evt product_info">
+					<ul class="swiper-wrapper product_list_evt product_info ga_event_detail_18">
 					${promoList.map(slide => $QUI.Promo.COMP.PromoSlide(slide,'컨텐츠배너')).join('')}
 					</ul>
 				</div>

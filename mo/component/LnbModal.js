@@ -57,6 +57,13 @@
             const $eventTarget = event.target?.closest('a');
             const no = $eventTarget?.dataset.dspCtgryNo;
             const upperNo = $eventTarget?.dataset.upperCtgryNo;
+
+            try {
+                // [GA4] 트래킹 : 페이지뷰 + 맞춤 이벤트
+                const isSkipPageView = type == 'link' ? true : false;       // Link 이동시 페이지뷰 미전송 처리
+                $QUI.Lnb.ga4_tracking(no, 'LNB_MODAL', isSkipPageView);
+            } catch (error) {
+            }
     
             if(type === 'link'){
                 const excludeName = Object.keys($QUI.Lnb._excludeDict).find(key=>$QUI.Lnb._excludeDict[key] == no) || 'SNB';

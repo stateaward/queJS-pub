@@ -39,6 +39,7 @@
     
         renderSort(sortCd);    // 랜더링 다시 안해도 괜찮음
         $QFn.CTGRY.updateForm({sort:sortCd,page:'1',back:'N'}, 'getList');
+        ga4_sendEventTag(sortCd);
     }
     
     const renderSort = function(selectedSortCd){
@@ -83,6 +84,28 @@
         }
     
         return resultSort;
+    }
+
+    // GA4 - 이벤트 태그 발생
+    const sendEventTag = function(sortCd){
+        try {
+            const {category} = $QFn.GA.getEvnetParam('SORT');
+            const label = getSortName(sortCd);
+            GA4.EVENT.set(category, "정렬", label);
+        } catch (error) {
+        }
+    }
+
+    // GA4 - 검증 후 보내는 함수
+    const ga4_sendEventTag = $QFn.GA.validGA4(sendEventTag);
+
+    // 정렬 한글명 추출
+    const getSortName = function(sortCd){
+        const {page_name} = $QFn.getCurrentInfo();
+        const sortDictionary = page_name == 'BEST' ? sortBestDict : $QUI.Sort._sortDict;
+        const sortObj = sortDictionary.find(item => item.cd == sortCd);
+
+        return sortObj.korNm;
     }
 
     /*

@@ -6,7 +6,7 @@
         const escpStr = GPGA.escpQt(promo.title);
         
         return `
-            <li data-event-name="${promo.subTitle}">
+            <li data-event-name="${promo.title}">
                 <a href="${promo.link}" class="link_wrap">
                     <div class="thumb_area">
                         <span class="thumb"><img img="" onerror="imgErr(this)" src="${promo.imageUrl}" alt="${promo.title}"></span>

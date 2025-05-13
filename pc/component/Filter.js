@@ -207,8 +207,12 @@
         if(info.mGubun != 'CTGRY'){
             // 제외) 브랜드 필터 없는 경우(브랜드관, 특별관)
         }else{
+            $Que.render('FilterBrandResult', '');   // 브랜드 결과 초기화(GA 체크 제외)
             $QUI.Filter.initBrandFilter();
         }
+
+        // [GA4] 이벤트 태깅
+        ga4_sendEventTag('초기화');
     }
 
     // [exports] 필터 초기화
@@ -247,6 +251,24 @@
         $QFn.CTGRY.getGodsList();
         resetFilterActive();
         $QFn.CTGRY.scrollCtgry();
+
+        // [GA4] 이벤트 태깅
+        ga4_sendEventTag('상품 보기');
+    }
+
+    // [GA4] 이벤트 태깅 - 상세필터
+    const ga4_sendEventTag = function(label){
+        const {filterGods, filterColors, filterBrands} = GA4.EVENT.getFilterEvent();
+        const priceText = document.querySelector('#ctgryFilterParams [name="price"]')?.value;
+        const customParam = {
+            ep_filter_Price : (priceText!='0,999999999') ? priceText.replace(',','~') : 'ALL' ,
+            ep_filter_Info : (filterGods.length>0) ? filterGods.join('_') : 'ALL',
+            ep_filter_Color : (filterColors.length>0) ? filterColors.join('_') : 'ALL',
+            ep_filter_Brand : (filterBrands.length>0) ? filterBrands.join('_') : 'ALL',
+        };
+
+        const {category} = $QFn.GA.getEvnetParam('FILTER');
+        GA4.EVENT.set2(category, '상세필터', label, customParam);
     }
 
     /*

@@ -24,5 +24,8 @@
         }
         
         $QUI.Lnb.renderLnb(selectNo);
+
+        // [GA4] 페이지뷰 셋팅
+        $QUI.Lnb.ga4_tracking(selectNo, 'NO_EVENT_SEND');     // 이벤트는 미발생
     });
 })();

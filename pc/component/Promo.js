@@ -8,7 +8,7 @@
             <section class="section_gap2">
                 <div class="tit_area brand">
                     <h2 class="tit_lv2">주목할만한 이벤트</h2>
-                    <div class="pagination swiper_br02">
+                    <div class="pagination swiper_br02" style="display:${promoList.length > 3 ? 'flex' : 'none'}">
                             <a href="#none" class="swiper-button-prev">앞으로</a>
                             <a href="#none" class="swiper-button-next">뒤로</a>
                         </div>
@@ -34,7 +34,7 @@
                     </div> 
                 </div>
                 <div class="swiper swiper_type5">
-                    <ul class="swiper-wrapper product_info product_list_evt">
+                    <ul class="swiper-wrapper product_info product_list_evt ga_event_detail_14">
                         ${promoList.map(slide => $QUI.Promo.COMP.PromoSlide(slide,'컨텐츠배너')).join('')}
                     </ul>
                 </div>
